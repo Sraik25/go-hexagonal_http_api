@@ -1,5 +1,11 @@
 package mooc
 
+import "context"
+
+type CourseRepository interface {
+	Save(ctx context.Context, course Course) error
+}
+
 // Course is the data structure that presents a course.
 type Course struct {
 	id       string
