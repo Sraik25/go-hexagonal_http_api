@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal/platform/server"
-	"github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal/platform/storage/mysql"
+	"github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal/platform/storage/storagemocks"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -28,7 +28,7 @@ func Run() error {
 		return err
 	}
 
-	courseRepository := mysql.NewCourseRepository(db)
+	courseRepository := storagemocks.NewCourseRepository(*db)
 
 	srv := server.New(host, port, courseRepository)
 	return srv.Run()
