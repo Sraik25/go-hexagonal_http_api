@@ -24,10 +24,10 @@ func CreateHandler(courseRepository mooc.CourseRepository) gin.HandlerFunc {
 
 		course := mooc.NewCourse(req.ID, req.Name, req.Duration)
 
-		// if err := Save(ctx, course); err != nil {
-		// 	ctx.JSON(http.StatusInternalServerError, err.Error())
-		// 	return
-		// }
+		if err := Save(ctx, course); err != nil {
+			ctx.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
 
 		ctx.Status(http.StatusCreated)
 	}
