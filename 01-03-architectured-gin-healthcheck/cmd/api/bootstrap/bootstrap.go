@@ -1,6 +1,6 @@
 package bootstrap
 
-import "github.com/Sraik25/go-hexagonal_http_api/02-01-architectured-gin-healthcheck/internal/platform/server"
+import "github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal/platform/server"
 
 const (
 	host = "localhost"

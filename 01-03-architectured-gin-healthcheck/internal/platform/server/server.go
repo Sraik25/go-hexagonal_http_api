@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/Sraik25/go-hexagonal_http_api/02-01-architectured-gin-healthcheck/internal/platform/server/handler/health"
+	"github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal/platform/server/handler/courses"
+	"github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal/platform/server/handler/health"
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,4 +31,5 @@ func (s *Server) Run() error {
 
 func (s *Server) registerRoutes() {
 	s.engine.GET("/health", health.CheckHandler())
+	s.engine.POST("/courses", courses.CreateHandler())
 }
