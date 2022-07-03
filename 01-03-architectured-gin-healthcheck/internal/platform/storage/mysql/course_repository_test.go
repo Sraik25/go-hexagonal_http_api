@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	mooc "github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal"
@@ -24,7 +25,7 @@ func Test_CourseRepository_Save_RepositoryError(t *testing.T) {
 		WithArgs(courseID, courseName, courseDuration).
 		WillReturnError(errors.New("something-failed"))
 
-	repo := NewCourseRepository(db)
+	repo := NewCourseRepository(db, 1*time.Millisecond)
 
 	err = repo.Save(context.Background(), course)
 
@@ -46,7 +47,7 @@ func Test_CourseRepository_Save_Success(t *testing.T) {
 		WithArgs(courseID, courseName, courseDuration).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 
-	repo := NewCourseRepository(db)
+	repo := NewCourseRepository(db, 1*time.Millisecond)
 
 	err = repo.Save(context.Background(), course)
 
