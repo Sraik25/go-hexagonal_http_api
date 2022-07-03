@@ -1,8 +1,10 @@
 package bootstrap
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal/creating"
 	"github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal/platform/bus/inmemory"
@@ -12,8 +14,9 @@ import (
 )
 
 const (
-	host = "localhost"
-	port = 8080
+	host            = "localhost"
+	port            = 8080
+	shutdownTimeout = 10 * time.Second
 
 	dbUser = "codely"
 	dbPass = "codely"
@@ -40,6 +43,6 @@ func Run() error {
 
 	commandBus.Register(creating.CourseCommandType, createCourseCommandHandler)
 
-	srv := server.New(host, port, commandBus)
-	return srv.Run()
+	ctx, srv := server.New(context.Background(), host, port, shutdownTimeout, commandBus)
+	return srv.Run(ctx)
 }
