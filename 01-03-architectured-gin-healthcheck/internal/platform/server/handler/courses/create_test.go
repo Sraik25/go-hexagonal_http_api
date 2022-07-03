@@ -7,8 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal/creating"
-	"github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal/platform/storage/storagemocks"
+	"github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/kit/command/commandmocks"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -16,14 +15,15 @@ import (
 )
 
 func TestHandler_Create(t *testing.T) {
-	courseRepository := new(storagemocks.CourseRepository)
-	courseRepository.On("Save", mock.Anything, mock.AnythingOfType("mooc.Course")).Return(nil)
-
-	createCourseSrv := creating.NewCourseService(courseRepository)
-	gin.SetMode(gin.TestMode)
+	commandBus := new(commandmocks.Bus)
+	commandBus.On(
+		"Dispatch",
+		mock.Anything,
+		mock.AnythingOfType("creating.CourseCommand"),
+	).Return(nil)
 
 	r := gin.New()
-	r.POST("/courses", CreateHandler(createCourseSrv))
+	r.POST("/courses", CreateHandler(commandBus))
 
 	t.Run("given an invalid request it returns 400", func(t *testing.T) {
 		createCourseReq := createRequest{

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal/creating"
+	"github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal/platform/bus/inmemory"
 	"github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal/platform/server"
 	"github.com/Sraik25/go-hexagonal_http_api/01-03-architectured-gin-healthcheck/internal/platform/storage/mysql"
 	_ "github.com/go-sql-driver/mysql"
@@ -29,10 +30,16 @@ func Run() error {
 		return err
 	}
 
+	var commandBus = inmemory.NewCommandBus()
+
 	courseRepository := mysql.NewCourseRepository(db)
 
 	creatingCourseService := creating.NewCourseService(courseRepository)
 
-	srv := server.New(host, port, creatingCourseService)
+	createCourseCommandHandler := creating.NewCourseCommandHandler(creatingCourseService)
+
+	commandBus.Register(creating.CourseCommandType, createCourseCommandHandler)
+
+	srv := server.New(host, port, commandBus)
 	return srv.Run()
 }
