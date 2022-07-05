@@ -1,0 +1,9 @@
+CREATE TABLE courses
+(
+  id VARCHAR(225) NOT NULL,
+  name VARCHAR(225) NOT NULL,
+  duration VARCHAR(225) NOT NULL,
+
+  PRIMARY KEY (id)
+) CHARACTER SET utf8mb4
+  COLLATE utf8mb4_bin;
